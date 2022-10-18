@@ -1,5 +1,6 @@
 package org.parkingLot;
 
+import org.parkingLot.constants.BusinessConstants;
 import org.parkingLot.constants.ExceptionConstants;
 import org.parkingLot.exceptions.InvalidTicketException;
 import org.parkingLot.exceptions.ParkingLotFullException;
@@ -18,18 +19,18 @@ public class ParkingLot {
     Ticket park(Car car) throws ParkingLotFullException {
         if (isFull()) {
             throw new ParkingLotFullException(ExceptionConstants.parkingLotFullErrMsg);
-        } else {
-            parkedCars.add(car);
         }
+        parkedCars.add(car);
         return new Ticket(car.licensePlateNumber);
     }
 
     Car pick(Ticket ticket) throws InvalidTicketException {
-        if (ticket.licensePlateNumber.length() != 6) {
+        if (!validateTicket(ticket)) {
             throw new InvalidTicketException(ExceptionConstants.illegalLicensePlateNumberErrMsg);
         }
         for (Car parkedCar : parkedCars) {
             if (Objects.equals(parkedCar.licensePlateNumber, ticket.licensePlateNumber)) {
+                parkedCars.remove(parkedCar);
                 return parkedCar;
             }
         }
@@ -38,5 +39,9 @@ public class ParkingLot {
 
     public Boolean isFull() {
         return parkedCars.size() >= parkingSpotNumber;
+    }
+
+    private Boolean validateTicket(Ticket ticket) {
+        return ticket.licensePlateNumber.length() == BusinessConstants.licensePlateNumberLength;
     }
 }
