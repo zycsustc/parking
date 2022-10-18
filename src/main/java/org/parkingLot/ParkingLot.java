@@ -25,7 +25,7 @@ public class ParkingLot {
     }
 
     Car pick(Ticket ticket) throws InvalidTicketException {
-        if (!validateTicket(ticket)) {
+        if (ticketIsIllegal(ticket)) {
             throw new InvalidTicketException(ExceptionConstants.illegalLicensePlateNumberErrMsg);
         }
         for (Car parkedCar : parkedCars) {
@@ -34,14 +34,14 @@ public class ParkingLot {
                 return parkedCar;
             }
         }
-        return null;
+        throw new InvalidTicketException(ExceptionConstants.carNotInParkingLotErrMsg);
     }
 
     public Boolean isFull() {
         return parkedCars.size() >= parkingSpotNumber;
     }
 
-    private Boolean validateTicket(Ticket ticket) {
-        return ticket.licensePlateNumber.length() == BusinessConstants.licensePlateNumberLength;
+    private Boolean ticketIsIllegal(Ticket ticket) {
+        return ticket.licensePlateNumber.length() != BusinessConstants.licensePlateNumberLength;
     }
 }

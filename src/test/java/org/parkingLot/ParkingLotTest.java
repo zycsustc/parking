@@ -56,4 +56,16 @@ public class ParkingLotTest {
 
         assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.illegalLicensePlateNumberErrMsg);
     }
+
+    @Test
+    void should_throw_InvalidTicketException_given_ticket_car_not_in_parkingLot() throws Exception {
+        ParkingLot parkingLot = new ParkingLot(3);
+        Car car = new Car(mockLicensePlateNumber1);
+        parkingLot.park(car);
+        var invalidTicket = new Ticket(mockLicensePlateNumber2);
+
+        Exception exception = assertThrows(InvalidTicketException.class, () -> parkingLot.pick(invalidTicket));
+
+        assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.carNotInParkingLotErrMsg);
+    }
 }
