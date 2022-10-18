@@ -26,10 +26,20 @@ public class ParkingLotTest {
         ParkingLot parkingLot = new ParkingLot(1);
         Car car1 = new Car(mockLicensePlateNumber1);
         Car car2 = new Car(mockLicensePlateNumber2);
-
         parkingLot.park(car1);
 
         Exception exception = assertThrows(InvalidTicketException.class, () -> parkingLot.park(car2));
         assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.parkingLotFullErrMsg);
+    }
+
+    @Test
+    void should_pick_car_successfully_give_valid_ticket() throws Exception {
+        ParkingLot parkingLot = new ParkingLot(3);
+        Car car = new Car(mockLicensePlateNumber1);
+        var ticket = parkingLot.park(car);
+
+        var pickedCar = parkingLot.pick(ticket);
+
+        assertThat(pickedCar.licensePlateNumber).isEqualTo(mockLicensePlateNumber1);
     }
 }
