@@ -2,7 +2,7 @@ package org.parkingLot;
 
 import org.junit.jupiter.api.Test;
 import org.parkingLot.constants.ExceptionConstants;
-import org.parkingLot.exceptions.InvalidTicketException;
+import org.parkingLot.exceptions.ParkingLotFullException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -28,7 +28,7 @@ public class ParkingLotTest {
         Car car2 = new Car(mockLicensePlateNumber2);
         parkingLot.park(car1);
 
-        Exception exception = assertThrows(InvalidTicketException.class, () -> parkingLot.park(car2));
+        Exception exception = assertThrows(ParkingLotFullException.class, () -> parkingLot.park(car2));
         assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.parkingLotFullErrMsg);
     }
 
