@@ -11,7 +11,9 @@ public class ParkingLotTest {
     void should_park_successfully_given_nonEmpty_parkingLot() {
         ParkingLot parkingLot = new ParkingLot(10);
         Car car = new Car(mockLicensePlateNumber);
+
         var ticket = parkingLot.park(car);
+
         assertThat(ticket.licensePlateNumber).isEqualTo(mockLicensePlateNumber);
     }
 }
