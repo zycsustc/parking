@@ -1,6 +1,6 @@
 package org.parkingLot;
 
-import org.parkingLot.exceptions.Constants;
+import org.parkingLot.constants.ExceptionConstants;
 import org.parkingLot.exceptions.InvalidTicketException;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class ParkingLot {
         if (parkedCars.size() < parkingSpotNumber) {
             parkedCars.add(car);
         } else {
-            throw new InvalidTicketException(Constants.parkingLotFullErrMsg);
+            throw new InvalidTicketException(ExceptionConstants.parkingLotFullErrMsg);
         }
         return new Ticket(car.licensePlateNumber);
     }

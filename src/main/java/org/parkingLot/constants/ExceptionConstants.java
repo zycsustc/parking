@@ -1,5 +1,5 @@
-package org.parkingLot.exceptions;
+package org.parkingLot.constants;
 
-public class Constants {
+public class ExceptionConstants {
     public static final String parkingLotFullErrMsg = "ParkingLot is full.";
 }
