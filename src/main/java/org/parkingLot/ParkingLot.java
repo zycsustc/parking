@@ -1,6 +1,7 @@
 package org.parkingLot;
 
 import org.parkingLot.constants.ExceptionConstants;
+import org.parkingLot.exceptions.InvalidTicketException;
 import org.parkingLot.exceptions.ParkingLotFullException;
 
 import java.util.ArrayList;
@@ -23,7 +24,10 @@ public class ParkingLot {
         return new Ticket(car.licensePlateNumber);
     }
 
-    Car pick(Ticket ticket) {
+    Car pick(Ticket ticket) throws InvalidTicketException {
+        if (ticket.licensePlateNumber.length() != 6) {
+            throw new InvalidTicketException(ExceptionConstants.illegalLicensePlateNumberErrMsg);
+        }
         for (Car parkedCar : parkedCars) {
             if (Objects.equals(parkedCar.licensePlateNumber, ticket.licensePlateNumber)) {
                 return parkedCar;
