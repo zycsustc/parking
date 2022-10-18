@@ -8,17 +8,17 @@ import java.util.Objects;
 
 public class ParkingLot {
     int parkingSpotNumber;
-    ArrayList<Car> parkedCars = new ArrayList<>();
+    private final ArrayList<Car> parkedCars = new ArrayList<>();
 
     public ParkingLot(int size) {
         parkingSpotNumber = size;
     }
 
     Ticket park(Car car) throws InvalidTicketException {
-        if (parkedCars.size() < parkingSpotNumber) {
-            parkedCars.add(car);
-        } else {
+        if (isFull()) {
             throw new InvalidTicketException(ExceptionConstants.parkingLotFullErrMsg);
+        } else {
+            parkedCars.add(car);
         }
         return new Ticket(car.licensePlateNumber);
     }
@@ -30,5 +30,9 @@ public class ParkingLot {
             }
         }
         return null;
+    }
+
+    public Boolean isFull() {
+        return parkedCars.size() >= parkingSpotNumber;
     }
 }
