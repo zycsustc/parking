@@ -5,12 +5,14 @@ import org.parkingLot.constants.ExceptionConstants;
 import org.parkingLot.exceptions.InvalidTicketException;
 import org.parkingLot.exceptions.ParkingLotFullException;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class ParkingLot {
     int parkingSpotNumber;
     private final ArrayList<Car> parkedCars = new ArrayList<>();
+    private final ArrayList<String> validParkTimes = new ArrayList<>();
 
     public ParkingLot(int size) {
         parkingSpotNumber = size;
@@ -21,16 +23,20 @@ public class ParkingLot {
             throw new ParkingLotFullException(ExceptionConstants.parkingLotFullErrMsg);
         }
         parkedCars.add(car);
-        return new Ticket(car.licensePlateNumber);
+        return generateTicket(car.licensePlateNumber);
     }
 
     Car pick(Ticket ticket) throws InvalidTicketException {
-        if (ticketIsIllegal(ticket)) {
+        if (isTicketIllegal(ticket)) {
             throw new InvalidTicketException(ExceptionConstants.illegalLicensePlateNumberErrMsg);
+        }
+        if (!validParkTimes.contains(ticket.parkTime)) {
+            throw new InvalidTicketException(ExceptionConstants.invalidTicketDefaultErrMsg);
         }
         for (Car parkedCar : parkedCars) {
             if (Objects.equals(parkedCar.licensePlateNumber, ticket.licensePlateNumber)) {
                 parkedCars.remove(parkedCar);
+                validParkTimes.remove(ticket.parkTime);
                 return parkedCar;
             }
         }
@@ -41,7 +47,14 @@ public class ParkingLot {
         return parkedCars.size() >= parkingSpotNumber;
     }
 
-    private Boolean ticketIsIllegal(Ticket ticket) {
+    private Boolean isTicketIllegal(Ticket ticket) {
         return ticket.licensePlateNumber.length() != BusinessConstants.licensePlateNumberLength;
+    }
+
+    private Ticket generateTicket(String licensePlateNumber) {
+        final String time = Instant.now().toString();
+        var ticket = new Ticket(licensePlateNumber, time);
+        validParkTimes.add(time);
+        return ticket;
     }
 }

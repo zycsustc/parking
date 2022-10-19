@@ -2,7 +2,9 @@ package org.parkingLot;
 
 public class Ticket {
     String licensePlateNumber;
-    public Ticket(String number) {
+    String parkTime;
+    public Ticket(String number, String time) {
         licensePlateNumber = number;
+        parkTime = time;
     }
 }

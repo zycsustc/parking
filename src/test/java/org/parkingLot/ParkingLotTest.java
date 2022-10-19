@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class ParkingLotTest {
     final String mockLicensePlateNumber1 = "ABC012";
     final String mockLicensePlateNumber2 = "ABC013";
+    final String mockTime = "2022-10-19T02:35:35.983774Z";
 
     @Test
     void should_park_successfully_given_nonEmpty_parkingLot() throws Exception {
@@ -50,7 +51,7 @@ public class ParkingLotTest {
         ParkingLot parkingLot = new ParkingLot(3);
         Car car = new Car(mockLicensePlateNumber1);
         parkingLot.park(car);
-        var invalidTicket = new Ticket("XXX");
+        var invalidTicket = new Ticket("XXX", mockTime);
 
         Exception exception = assertThrows(InvalidTicketException.class, () -> parkingLot.pick(invalidTicket));
 
@@ -61,11 +62,24 @@ public class ParkingLotTest {
     void should_throw_InvalidTicketException_given_ticket_car_not_in_parkingLot() throws Exception {
         ParkingLot parkingLot = new ParkingLot(3);
         Car car = new Car(mockLicensePlateNumber1);
-        parkingLot.park(car);
-        var invalidTicket = new Ticket(mockLicensePlateNumber2);
+        var ticket = parkingLot.park(car);
+        var invalidTicket = new Ticket(mockLicensePlateNumber2, ticket.parkTime);
 
         Exception exception = assertThrows(InvalidTicketException.class, () -> parkingLot.pick(invalidTicket));
 
         assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.carNotInParkingLotErrMsg);
+    }
+
+    @Test
+    void should_throw_InvalidTicketException_given_1st_ticket_when_picking_2nd_parked_car() throws Exception {
+        ParkingLot parkingLot = new ParkingLot(3);
+        Car car = new Car(mockLicensePlateNumber1);
+        var ticket1 = parkingLot.park(car);
+        parkingLot.pick(ticket1);
+        parkingLot.park(car);
+
+        Exception exception = assertThrows(InvalidTicketException.class, () -> parkingLot.pick(ticket1));
+
+        assertThat(exception.getMessage()).isEqualTo(ExceptionConstants.invalidTicketDefaultErrMsg);
     }
 }
