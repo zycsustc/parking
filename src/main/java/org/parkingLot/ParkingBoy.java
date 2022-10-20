@@ -1,16 +1,8 @@
 package org.parkingLot;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
-public class ParkingBoy {
-    private final List<ParkingLot> parkingLotList;
-
-    public ParkingBoy(List<ParkingLot> parkingLotList) {
-        this.parkingLotList = parkingLotList;
-    }
+public record ParkingBoy(List<ParkingLot> parkingLotList) {
 
     Ticket park(Car car) {
         var maxEmptyNum = parkingLotList.stream().mapToInt(ParkingLot::emptyCapacity).reduce(0, Math::max);

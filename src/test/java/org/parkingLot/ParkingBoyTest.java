@@ -1,6 +1,7 @@
 package org.parkingLot;
 
 import org.junit.jupiter.api.Test;
+import org.parkingLot.exceptions.ParkingLotFullException;
 
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,5 +34,15 @@ public class ParkingBoyTest {
         assertThat(ticket).isInstanceOf(Ticket.class);
         assertThat(parkingLot1.contains(ticket)).isEqualTo(false);
         assertThat(parkingLot2.contains(ticket)).isEqualTo(true);
+    }
+
+    @Test
+    void should_throw_ParkingLotFullException_when_park_given_all_parkingLots_are_full(){
+        final ParkingLot parkingLot = new ParkingLot(1);
+        ParkingBoy parkingBoy = new ParkingBoy(List.of(parkingLot));
+        parkingBoy.park(new Car());
+        Car car = new Car();
+
+        assertThrows(ParkingLotFullException.class, () -> parkingBoy.park(car));
     }
 }
