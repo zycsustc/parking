@@ -30,7 +30,15 @@ public class ParkingLot {
         return parkedCarMap.remove(ticket);
     }
 
-    public Boolean isFull() {
+    public boolean isFull() {
         return parkedCarMap.size() >= capacity;
+    }
+
+    public boolean contains(Ticket ticket) {
+        return parkedCarMap.containsKey(ticket);
+    }
+
+    public int emptyCapacity() {
+        return capacity - parkedCarMap.size();
     }
 }
